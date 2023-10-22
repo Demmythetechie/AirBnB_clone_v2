@@ -1,53 +1,73 @@
 #!/usr/bin/env bash
-# This will set uo the web server so we can deploy our Airbnb clone project
-sudo apt-get update
-sudo apt-get install nginx
+# This script sets up your web server for the deployment of web static
 
-# creaye a foldee /data/ if not exists
-mkdir -p /data/
+apt -y install nginx
 
-# create a folder /data/web_static if not exist
-mkdir -p /data/web_static/
+if [ ! -d "/data/" ]
+then
+	mkdir "/data/"
+fi
 
-# create a folder /data/web_static/releases/ if not exist
-mkdir -p /data/web_static/releases/
+if [ ! -d "/data/web_static/" ]
+then
+        mkdir "/data/web_static/"
+fi
 
-# create a folder /data/web_static/shared/ if not exists
-mkdir -p /data/web_static/shared/
+if [ ! -d "/data/web_static/releases/" ]
+then
+        mkdir "/data/web_static/releases/"
+fi
 
-# create a folder /data/web_static/releases/test/ if not exist
-mkdir -p /data/web_static/releases/test
+if [ ! -d "/data/web_static/shared/ " ]
+then
+        mkdir "/data/web_static/shared/"
+fi
 
-# create a fake html fike
-printf "<html>
-	<head>
-	</head>
-	<body>
-	Holberton School	
-	</body>
-	</html>"> /data/web_static/releases/test/index.html
+if [ ! -d "/data/web_static/releases/test/" ]
+then
+        mkdir "/data/web_static/releases/test/"
+fi
 
-# creating a symbolic link 
-ln -sf /data/web_static/releases/test/ /data/web_static/current
+if [ ! -e "/data/web_static/releases/test/index.html" ]
+then
+        echo "
+<html>
+  <head>
+  </head>
+  <body>
+    Holberton School
+  </body>
+</html>" > "/data/web_static/releases/test/index.html"
+fi
 
-# give ownership of the /data/ to ubuntu
+if [ ! -L "/data/web_static/current" ]
+then
+	rm /data/web_static/current
+	ln -s "/data/web_static/releases/test/" "/data/web_static/current"
+else
+	rm /data/web_static/current
+        ln -s "/data/web_static/releases/test/" "/data/web_static/current"
+fi
+
 chown -R ubuntu /data/
 chgrp -R ubuntu /data/
 
-# update the nginx configuration to serve the content of /data/web_static/current/ to hbnb_static
 printf %s "server {
     listen 80 default_server;
     listen [::]:80 default_server;
     add_header X-Served-By $HOSTNAME;
     root   /var/www/html;
     index  index.html index.htm;
+
     location /hbnb_static {
         alias /data/web_static/current;
         index index.html index.htm;
     }
+
     location /redirect_me {
-        return 301 http://seyiemmanuel.com/;
+        return 301 http://cuberule.com/;
     }
+
     error_page 404 /404.html;
     location /404 {
       root /var/www/html;
