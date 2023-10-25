@@ -2,30 +2,29 @@
 """
 This script generates an archive from web_static dir
 """
-import os
+from fabric import Connection, task
 from datetime import datetime
-from fabric.api import local, runs_once
 
 
-@runs_once
-def do_pack():
-    """Archives the static files."""
-    if not os.path.isdir("versions"):
-        os.mkdir("versions")
-    cur_time = datetime.now()
-    output = "versions/web_static_{}{}{}{}{}{}.tgz".format(
-        cur_time.year,
-        cur_time.month,
-        cur_time.day,
-        cur_time.hour,
-        cur_time.minute,
-        cur_time.second
-    )
+@task
+def do_pack(context):
+    """
+    This script generates an archive from web_static dir
+    """
+
+    time = datetime.now()
+    y = time.year()
+    o = time.month()
+    d = time.day()
+    h = time.hour()
+    m = time.minute()
+    s = time.second()
+
     try:
-        print("Packing web_static to {}".format(output))
-        local("tar -cvzf {} web_static".format(output))
-        archize_size = os.stat(output).st_size
-        print("web_static packed: {} -> {} Bytes".format(output, archize_size))
+        name = f"web_static_{y}{o}{d}{h}{m}{s}"
+        lcl = Connection(host="localhost", user="demilade")
+        lcl.local('mkdir versions')
+        lcl.local('sudo apt -y install tar')
+        lcl.local(f"tar -cvf versions/{name}.tgz web_static/*")
     except Exception:
-        output = None
-    return output
+        return None
