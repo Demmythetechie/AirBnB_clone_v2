@@ -21,10 +21,10 @@ def do_pack(context):
     s = time.second()
 
     try:
-        name = f"web_static_{y}{o}{d}{h}{m}{s}"
+        name = "web_static_{}{}{}{}{}{}".format(y, o, d, h, m, s)
         lcl = Connection(host="localhost", user="demilade")
         lcl.local('mkdir versions')
         lcl.local('sudo apt -y install tar')
-        lcl.local(f"tar -cvf versions/{name}.tgz web_static/*")
+        lcl.local("tar -cvf versions/{}.tgz web_static/*".format(name))
     except Exception:
         return None
