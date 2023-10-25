@@ -1,7 +1,5 @@
 #!/usr/bin/python3
-"""
-This script generates an archive from web_static dir
-"""
+"""This script generates an archive from web_static dir."""
 from fabric import Connection, task
 from datetime import datetime
 
@@ -9,15 +7,14 @@ from datetime import datetime
 @task
 def do_pack():
     """Archives the static files."""
-    time = datetime.now()
-    y = time.year()
-    o = time.month()
-    d = time.day()
-    h = time.hour()
-    m = time.minute()
-    s = time.second()
-
     try:
+        time = datetime.now()
+        y = time.year()
+        o = time.month()
+        d = time.day()
+        h = time.hour()
+        m = time.minute()
+        s = time.second()
         name = "web_static_{}{}{}{}{}{}".format(y, o, d, h, m, s)
         lcl = Connection(host="localhost", user="demilade")
         lcl.local('mkdir versions')
