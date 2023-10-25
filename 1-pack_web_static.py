@@ -8,15 +8,7 @@ from datetime import datetime
 
 @task
 def do_pack(context):
-    """
-    This script generates an archive from web_static dir
-
-    Args:
-        context: just placed it there
-
-    Returns:
-        returns None incase it doesn't work
-    """
+    """This script generates an archive from web_static dir"""
     time = datetime.now()
     y = time.year()
     o = time.month()
