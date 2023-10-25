@@ -10,8 +10,13 @@ from datetime import datetime
 def do_pack(context):
     """
     This script generates an archive from web_static dir
-    """
 
+    Args:
+        context: just placed it there
+
+    Returns:
+        returns None incase it doesn't work
+    """
     time = datetime.now()
     y = time.year()
     o = time.month()
